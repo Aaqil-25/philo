@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabdur-r <mabdur-r@42.fr>                  +#+  +:+       +#+        */
+/*   By: mabdur-r <mabdur-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 15:56:41 by mabdur-r          #+#    #+#             */
-/*   Updated: 2025/12/05 15:56:44 by mabdur-r         ###   ########.fr       */
+/*   Updated: 2025/12/08 12:10:47 by mabdur-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ static int	validate_args(t_data *data)
 		printf("Error: number_of_philosophers must be between 1 and 200\n");
 		return (0);
 	}
-	if (data->time_to_die < 0 || data->time_to_eat < 0 || data->time_to_sleep < 0)
+	if (data->time_to_die < 0
+		|| data->time_to_eat < 0
+		|| data->time_to_sleep < 0)
 	{
 		printf("Error: time values must be positive\n");
 		return (0);
@@ -54,4 +56,3 @@ int	main(int argc, char **argv)
 	cleanup(&data, philos);
 	return (0);
 }
-

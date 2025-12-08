@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabdur-r <mabdur-r@42.fr>                  +#+  +:+       +#+        */
+/*   By: mabdur-r <mabdur-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 15:56:21 by mabdur-r          #+#    #+#             */
-/*   Updated: 2025/12/05 15:56:28 by mabdur-r         ###   ########.fr       */
+/*   Updated: 2025/12/08 11:22:30 by mabdur-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,3 @@ void	cleanup(t_data *data, t_philo *philos)
 	if (philos)
 		free(philos);
 }
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabdur-r <mabdur-r@42.fr>                  +#+  +:+       +#+        */
+/*   By: mabdur-r <mabdur-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 15:57:52 by mabdur-r          #+#    #+#             */
-/*   Updated: 2025/12/05 15:57:53 by mabdur-r         ###   ########.fr       */
+/*   Updated: 2025/12/08 11:23:23 by mabdur-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,3 @@ void	print_status(t_philo *philo, char *status)
 	printf("%ld %d %s\n", timestamp, philo->id, status);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
-

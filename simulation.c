@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabdur-r <mabdur-r@42.fr>                  +#+  +:+       +#+        */
+/*   By: mabdur-r <mabdur-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 15:57:44 by mabdur-r          #+#    #+#             */
-/*   Updated: 2025/12/05 15:57:45 by mabdur-r         ###   ########.fr       */
+/*   Updated: 2025/12/08 11:23:07 by mabdur-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,3 @@ int	start_simulation(t_data *data, t_philo *philos)
 	}
 	return (1);
 }
-

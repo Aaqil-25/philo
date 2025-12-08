@@ -3,20 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabdur-r <mabdur-r@42.fr>                  +#+  +:+       +#+        */
+/*   By: mabdur-r <mabdur-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 15:56:55 by mabdur-r          #+#    #+#             */
-/*   Updated: 2025/12/05 15:56:58 by mabdur-r         ###   ########.fr       */
+/*   Updated: 2025/12/08 11:41:25 by mabdur-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	check_death(t_philo *philo)
+static int	is_simulation_ended(t_philo *philo)
 {
-	long	current_time;
-	long	time_since_last_meal;
-
 	pthread_mutex_lock(&philo->data->death_mutex);
 	if (philo->data->simulation_end)
 	{
@@ -24,21 +21,34 @@ static int	check_death(t_philo *philo)
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->data->death_mutex);
+	return (0);
+}
+
+static int	handle_philo_death(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->death_mutex);
+	if (!philo->data->simulation_end)
+	{
+		philo->data->simulation_end = 1;
+		pthread_mutex_unlock(&philo->data->death_mutex);
+		print_status(philo, "died");
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->death_mutex);
+	return (1);
+}
+
+static int	check_death(t_philo *philo)
+{
+	long	current_time;
+	long	time_since_last_meal;
+
+	if (is_simulation_ended(philo))
+		return (1);
 	current_time = get_time_ms();
 	time_since_last_meal = current_time - philo->last_meal_time;
 	if (time_since_last_meal >= philo->data->time_to_die)
-	{
-		pthread_mutex_lock(&philo->data->death_mutex);
-		if (!philo->data->simulation_end)
-		{
-			philo->data->simulation_end = 1;
-			pthread_mutex_unlock(&philo->data->death_mutex);
-			print_status(philo, "died");
-			return (1);
-		}
-		pthread_mutex_unlock(&philo->data->death_mutex);
-		return (1);
-	}
+		return (handle_philo_death(philo));
 	return (0);
 }
 
@@ -93,4 +103,3 @@ void	*monitor_death(void *arg)
 	}
 	return (NULL);
 }
-

@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabdur-r <mabdur-r@42.fr>                  +#+  +:+       +#+        */
+/*   By: mabdur-r <mabdur-r@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 15:57:36 by mabdur-r          #+#    #+#             */
-/*   Updated: 2025/12/05 16:00:01 by mabdur-r         ###   ########.fr       */
+/*   Updated: 2025/12/08 11:24:22 by mabdur-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "philo.h"
 
@@ -86,4 +85,3 @@ void	*philosopher_life(void *arg)
 	}
 	return (NULL);
 }
-
