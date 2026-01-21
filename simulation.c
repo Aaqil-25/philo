@@ -12,17 +12,28 @@
 
 #include "philo.h"
 
-int	start_simulation(t_data *data, t_philo *philos)
+static void	join_philos(t_philo *philos, int count)
 {
-	int			i;
-	pthread_t	monitor_thread;
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		pthread_join(philos[i].thread, NULL);
+		i++;
+	}
+}
+
+static int	create_philos(t_data *data, t_philo *philos)
+{
+	int	i;
 
 	i = 0;
 	while (i < data->num_philos)
 	{
-		if (pthread_create(&philos[i].thread, NULL, philosopher_life, &philos[i]) != 0)
+		if (pthread_create(&philos[i].thread, NULL,
+				philosopher_life, &philos[i]) != 0)
 		{
-			printf("Error: Failed to create thread for philosopher %d\n", i + 1);
 			data->simulation_end = 1;
 			while (--i >= 0)
 				pthread_join(philos[i].thread, NULL);
@@ -30,24 +41,22 @@ int	start_simulation(t_data *data, t_philo *philos)
 		}
 		i++;
 	}
+	return (1);
+}
+
+int	start_simulation(t_data *data, t_philo *philos)
+{
+	pthread_t	monitor_thread;
+
+	if (!create_philos(data, philos))
+		return (0);
 	if (pthread_create(&monitor_thread, NULL, monitor_death, philos) != 0)
 	{
-		printf("Error: Failed to create monitor thread\n");
 		data->simulation_end = 1;
-		i = 0;
-		while (i < data->num_philos)
-		{
-			pthread_join(philos[i].thread, NULL);
-			i++;
-		}
+		join_philos(philos, data->num_philos);
 		return (0);
 	}
 	pthread_join(monitor_thread, NULL);
-	i = 0;
-	while (i < data->num_philos)
-	{
-		pthread_join(philos[i].thread, NULL);
-		i++;
-	}
+	join_philos(philos, data->num_philos);
 	return (1);
 }

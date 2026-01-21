@@ -30,12 +30,6 @@ static void	take_forks(t_philo *philo)
 	}
 }
 
-static void	drop_forks(t_philo *philo)
-{
-	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
-	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
-}
-
 static void	eat(t_philo *philo)
 {
 	take_forks(philo);
@@ -44,7 +38,8 @@ static void	eat(t_philo *philo)
 	print_status(philo, "is eating");
 	usleep(philo->data->time_to_eat * 1000);
 	philo->meals_eaten++;
-	drop_forks(philo);
+	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
+	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
 }
 
 static void	sleep_philo(t_philo *philo)
