@@ -12,6 +12,21 @@
 
 #include "philo.h"
 
+static void	handle_single_philo(t_data *data, t_philo *philos)
+{
+	long	timestamp;
+
+	pthread_mutex_lock(&data->print_mutex);
+	timestamp = get_time_ms() - data->start_time;
+	printf("%ld %d has taken a fork\n", timestamp, philos[0].id);
+	pthread_mutex_unlock(&data->print_mutex);
+	usleep(data->time_to_die * 1000);
+	pthread_mutex_lock(&data->print_mutex);
+	timestamp = get_time_ms() - data->start_time;
+	printf("%ld %d died\n", timestamp, philos[0].id);
+	pthread_mutex_unlock(&data->print_mutex);
+}
+
 static void	join_philos(t_philo *philos, int count)
 {
 	int	i;
@@ -48,6 +63,11 @@ int	start_simulation(t_data *data, t_philo *philos)
 {
 	pthread_t	monitor_thread;
 
+	if (data->num_philos == 1)
+	{
+		handle_single_philo(data, philos);
+		return (1);
+	}
 	if (!create_philos(data, philos))
 		return (0);
 	if (pthread_create(&monitor_thread, NULL, monitor_death, philos) != 0)
