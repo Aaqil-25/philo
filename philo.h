@@ -55,12 +55,15 @@ typedef struct s_philo
 	t_state			state;
 	t_data			*data;
 	pthread_t		thread;
+	pthread_mutex_t	meal_mutex;
 }	t_philo;
 
 // Function prototypes
 int		parse_args(int argc, char **argv, t_data *data);
 long	get_time_ms(void);
 void	print_status(t_philo *philo, char *status);
+int		check_simulation_end(t_philo *philo);
+int		check_meal_limit(t_philo *philo);
 void	*philosopher_life(void *arg);
 void	*monitor_death(void *arg);
 int		init_data(t_data *data, t_philo **philos);

@@ -26,12 +26,17 @@ static int	is_simulation_ended(t_philo *philo)
 
 static int	handle_philo_death(t_philo *philo)
 {
+	long	timestamp;
+
 	pthread_mutex_lock(&philo->data->death_mutex);
 	if (!philo->data->simulation_end)
 	{
 		philo->data->simulation_end = 1;
 		pthread_mutex_unlock(&philo->data->death_mutex);
-		print_status(philo, "died");
+		pthread_mutex_lock(&philo->data->print_mutex);
+		timestamp = get_time_ms() - philo->data->start_time;
+		printf("%ld %d died\n", timestamp, philo->id);
+		pthread_mutex_unlock(&philo->data->print_mutex);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->data->death_mutex);
@@ -46,7 +51,9 @@ static int	check_death(t_philo *philo)
 	if (is_simulation_ended(philo))
 		return (1);
 	current_time = get_time_ms();
+	pthread_mutex_lock(&philo->meal_mutex);
 	time_since_last_meal = current_time - philo->last_meal_time;
+	pthread_mutex_unlock(&philo->meal_mutex);
 	if (time_since_last_meal >= philo->data->time_to_die)
 		return (handle_philo_death(philo));
 	return (0);
@@ -68,8 +75,13 @@ static int	check_all_ate(t_data *data, t_philo *philos)
 	i = 0;
 	while (i < data->num_philos)
 	{
+		pthread_mutex_lock(&philos[i].meal_mutex);
 		if (philos[i].meals_eaten < data->num_times_to_eat)
+		{
+			pthread_mutex_unlock(&philos[i].meal_mutex);
 			return (0);
+		}
+		pthread_mutex_unlock(&philos[i].meal_mutex);
 		i++;
 	}
 	return (1);

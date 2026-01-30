@@ -34,3 +34,26 @@ void	print_status(t_philo *philo, char *status)
 	printf("%ld %d %s\n", timestamp, philo->id, status);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
+
+int	check_simulation_end(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->death_mutex);
+	if (philo->data->simulation_end)
+	{
+		pthread_mutex_unlock(&philo->data->death_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->death_mutex);
+	return (0);
+}
+
+int	check_meal_limit(t_philo *philo)
+{
+	int	should_stop;
+
+	pthread_mutex_lock(&philo->meal_mutex);
+	should_stop = (philo->data->num_times_to_eat != -1
+			&& philo->meals_eaten >= philo->data->num_times_to_eat);
+	pthread_mutex_unlock(&philo->meal_mutex);
+	return (should_stop);
+}

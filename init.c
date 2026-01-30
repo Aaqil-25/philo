@@ -52,6 +52,12 @@ static void	init_philosophers(t_philo *philos, t_data *data)
 		philos[i].last_meal_time = data->start_time;
 		philos[i].state = THINKING;
 		philos[i].data = data;
+		if (pthread_mutex_init(&philos[i].meal_mutex, NULL) != 0)
+		{
+			while (--i >= 0)
+				pthread_mutex_destroy(&philos[i].meal_mutex);
+			return ;
+		}
 		i++;
 	}
 }
@@ -92,5 +98,13 @@ void	cleanup(t_data *data, t_philo *philos)
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_mutex_destroy(&data->death_mutex);
 	if (philos)
+	{
+		i = 0;
+		while (i < data->num_philos)
+		{
+			pthread_mutex_destroy(&philos[i].meal_mutex);
+			i++;
+		}
 		free(philos);
+	}
 }
