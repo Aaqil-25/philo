@@ -49,7 +49,9 @@ static int	create_philos(t_data *data, t_philo *philos)
 		if (pthread_create(&philos[i].thread, NULL,
 				philosopher_life, &philos[i]) != 0)
 		{
+			pthread_mutex_lock(&data->death_mutex);
 			data->simulation_end = 1;
+			pthread_mutex_unlock(&data->death_mutex);
 			while (--i >= 0)
 				pthread_join(philos[i].thread, NULL);
 			return (0);
@@ -72,7 +74,9 @@ int	start_simulation(t_data *data, t_philo *philos)
 		return (0);
 	if (pthread_create(&monitor_thread, NULL, monitor_death, philos) != 0)
 	{
+		pthread_mutex_lock(&data->death_mutex);
 		data->simulation_end = 1;
+		pthread_mutex_unlock(&data->death_mutex);
 		join_philos(philos, data->num_philos);
 		return (0);
 	}

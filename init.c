@@ -38,7 +38,7 @@ static int	init_mutexes(t_data *data)
 	return (1);
 }
 
-static void	init_philosophers(t_philo *philos, t_data *data)
+static int	init_philosophers(t_philo *philos, t_data *data)
 {
 	int	i;
 
@@ -56,10 +56,11 @@ static void	init_philosophers(t_philo *philos, t_data *data)
 		{
 			while (--i >= 0)
 				pthread_mutex_destroy(&philos[i].meal_mutex);
-			return ;
+			return (0);
 		}
 		i++;
 	}
+	return (1);
 }
 
 int	init_data(t_data *data, t_philo **philos)
@@ -77,7 +78,11 @@ int	init_data(t_data *data, t_philo **philos)
 		cleanup(data, NULL);
 		return (0);
 	}
-	init_philosophers(*philos, data);
+	if (!init_philosophers(*philos, data))
+	{
+		cleanup(data, *philos);
+		return (0);
+	}
 	return (1);
 }
 
